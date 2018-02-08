@@ -5,13 +5,13 @@ import dbConnector from './db/dbConnector';
 import jwt from 'jsonwebtoken';
 import user from './db/schemas/user';
 import config from './config';
-
+const compression = require('compression');
 const app = express();
 
 dbConnector.connect();
 app.set('superSecret', config.secret);
 
-
+app.use(compression());
 app.use(bodyParser.json());
 app.use(function(req, res, next){
 	// Website you wish to allow to connect
@@ -41,5 +41,5 @@ app.listen(PORT, err => {
   if(err)
     console.error(`Error on port: ${PORT}`);
   else
-    console.log(`Listening on port: ${PORT}`);
+    console.log(`Listening on port: ${PORT}-${process.env.NODE_ENV} mode`);
 });

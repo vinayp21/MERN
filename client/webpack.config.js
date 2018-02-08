@@ -1,11 +1,12 @@
+const path = require('path');
 var webpack = require('webpack');
 
 var config = {
    entry: './index.js',
 
    output: {
-      path:'/dist',
-      filename: './dist/index.js',
+      path:path.resolve(__dirname, 'dist'),
+      filename: 'index.js',
    },
 
    devServer: {
