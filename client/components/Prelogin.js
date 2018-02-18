@@ -84,7 +84,20 @@ import 'bootstrap'
       };
       this.props.onLogin(loginObj);
     }
-    componentWillMount(){
+    googleReg =() =>{
+
+
+      gapi.auth2.init({
+        client_id: '900774381205-0f0kpte6v8a4jsq2q30ivcjc3kb2lghg.apps.googleusercontent.com',
+        fetch_basic_profile: true
+      });
+      gapi.auth2.getAuthInstance().signIn().then(function(data){
+        console.log(data.getBasicProfile().getId());
+      });
+    }
+    componentDidMount(){
+
+
       let action={
         url:'http://localhost:3000/task-tracker/api/project/',
         reqObj:{}
@@ -101,6 +114,9 @@ import 'bootstrap'
       .catch(error => {
 
       });
+    }
+    onSignIn=(userDetails) => {
+      console.log(userDetails);
     }
 
     render(){
@@ -193,6 +209,12 @@ import 'bootstrap'
                       <input type="submit" className ="btn btn-primary submit" value="Register"/>
                   </td>
                 </tr>
+                <tr>
+                  <td>
+                      <div onClick={this.googleReg}>Google</div>
+                  </td>
+                </tr>
+
               </tbody>
             </table>
             </form>

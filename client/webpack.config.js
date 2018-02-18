@@ -5,8 +5,8 @@ var config = {
    entry: './index.js',
 
    output: {
-      path:path.resolve(__dirname, 'dist'),
-      filename: 'index.js',
+     path:'/dist',
+     filename: './dist/index.js',
    },
 
    devServer: {
