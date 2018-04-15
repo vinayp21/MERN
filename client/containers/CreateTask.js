@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {initaiteCreateTask} from '../actions';
+import {initaiteCreateTask, initaiteEditTask} from '../actions';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import {apiCall} from '../service'
@@ -21,12 +21,11 @@ class CreateTask extends React.Component{
   createTask=(e) => {
     e.preventDefault();
     let newTaskData={
-      taskId: Math.random().toString(),
     	taskName: this.state.taskName,
     	taskDescription: this.state.taskDesc,
     	createdOn: new Date(),
     	dueDate: this.state.dueDate,
-    	createdBy: this.props.userDetails.username,
+    	createdBy: this.props.userDetails.userName,
     	assignee: this.state.assignee,
     	status: 'Draft',
     	project:this.props.userDetails.project,
@@ -41,7 +40,13 @@ class CreateTask extends React.Component{
     if(this.props.tasks.sortData.sortData){
        sortCriteria=this.props.tasks.sortData;
     }
-    this.props.dispatch(initaiteCreateTask(filterCtiteria, sortCriteria, newTaskData));
+    if(this.props.editTaskDetails){
+      newTaskData.taskId=this.props.editTaskDetails._id;
+      this.props.dispatch(initaiteEditTask(filterCtiteria, sortCriteria, newTaskData));
+    }else{
+      newTaskData.taskId= Math.random().toString(),
+      this.props.dispatch(initaiteCreateTask(filterCtiteria, sortCriteria, newTaskData));
+    }
     this.setState({
       dueDate:moment(),
       taskName:'',
@@ -50,7 +55,7 @@ class CreateTask extends React.Component{
       team:'Select Team',
       assigneeSuggesions:[]
     });
-    $('#createTaskModal').modal('toggle');
+    $('#openModal').modal('toggle');
   };
   changeInput= (e) => {
     e.preventDefault();
@@ -202,7 +207,7 @@ class CreateTask extends React.Component{
                 </tr>
                 <tr>
                   <td>
-                    <input type="submit" value ="Create Task" />
+                    { this.props.editTaskDetails? <input type="submit" value ="Edit Task" /> : <input type="submit" value ="Create Task" />}
                   </td>
                 </tr>
                 </tbody>

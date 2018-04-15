@@ -6,9 +6,20 @@ import passwordEncoder from '../utilities/passwordEncoder';
 import apiResponseGenerator from '../utilities/apiResponseGenerator';
 import userAuthenticator from '../utilities/userAuthenticator';
 import config from '../config';
-
+import multer from 'multer';
 const routes = new Router;
 const app = express();
+let path = require('path')
+let storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'server/assets/profile/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname))
+  }
+})
+var upload = multer({ storage: storage });
+
 routes.post('/getAssignee',(req, res) => {
   var filter = {
     project:req.body.projectId,
@@ -17,6 +28,10 @@ routes.post('/getAssignee',(req, res) => {
   User.find(filter,{"name": 1, "userName": 1}).exec((err,data) =>{
     res.json(data);
   });
+});
+routes.post('/profileImage', upload.single('profile'), function (req, res, next) {
+  //console.log(req.file);
+  res.json(req.file);
 });
 
 routes.post('/getProjectUsersByTeam', (req, res) => {
@@ -29,6 +44,7 @@ routes.post('/getProjectUsersByTeam', (req, res) => {
    })
 });
 routes.post('/register', (req, res) => {
+  console.log(req.body.registrationDetails);
   let registrationDetails = req.body.registrationDetails,
   userName = registrationDetails.userName;
   userAuthenticator.isUserPresent(userName, (err, user) => {
@@ -47,7 +63,8 @@ routes.post('/register', (req, res) => {
       newUser.name = registrationDetails.name;
       newUser.project = registrationDetails.project;
       newUser.team = registrationDetails.team;
-
+      newUser.isAdmin = registrationDetails.isAdmin;
+      newUser.image = registrationDetails.image;
       newUser.save(function(err, user) {
         if (err) {
           res.json(apiResponseGenerator.generate(true, 'error in creating user'));
@@ -70,11 +87,18 @@ routes.post('/authenticate', (req, res) => {
         res.json(err);
         return;
       }
+       req.session.userInfo=user;
+       console.log(req.sessionID);
+       res.cookie('session-id', req.sessionID, { httpOnly: false});
        let token = jwt.sign({userName: userName},config.secret,{expiresIn: 60 * 60});
        res.json(apiResponseGenerator.generate(false,{'token':token,'user':user}));
     });
 });
-
+routes.post('/logout', (req, res) => {
+  req.session.destroy();
+  res.clearCookie('session-id');
+  res.json(apiResponseGenerator.generate(false,'Logout Success'));
+})
 routes.post('/delete', (req, res) => {
   let newUser = new User();
   let credentials = req.body.credentials;
@@ -104,5 +128,9 @@ routes.post('/update', (req, res) => {
   });
 });
 
+routes.post('/logout', (req, res) => {
+  req.session.authenticate=false;
+  res.json(apiResponseGenerator.generate(false,'logged out!'));
+});
 
 module.exports = routes;

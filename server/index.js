@@ -7,10 +7,19 @@ import user from './db/schemas/user';
 import config from './config';
 const compression = require('compression');
 const app = express();
+let session = require('express-session');
+let cookieParser = require('cookie-parser');
+app.use(cookieParser());
+app.use(session({
+  secret: "secret Key!",
+  resave: false,
+  httpOnly: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+  }));
 
 dbConnector.connect();
 app.set('superSecret', config.secret);
-
 app.use(compression());
 app.use(bodyParser.json());
 app.use(function(req, res, next){
@@ -30,12 +39,13 @@ app.use(function(req, res, next){
     // Pass to next layer of middleware
     next();
 });
+app.use(express.static(__dirname +'/assets'));
+
 app.use('/task-tracker/api', routes);
-app.use('/task-tracker',express.static('views'));
 const PORT = process.env.PORT || 3000;
 
 app.get('/', function (req, res) {
-  res.send('Hello!!! The API is at 8080');
+  res.send(`Hello!!! The API is at ${PORT}`);
 });
 app.listen(PORT, err => {
   if(err)

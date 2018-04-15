@@ -16,8 +16,59 @@ export const CREATE_TASK_FAILURE= 'CREATE_TASK_FAILURE';
 export const FETCH_PROJECT_STRUCTURE= 'FETCH_PROJECT_STRUCTURE';
 export const FETCH_PROJECT_STRUCTURE_SUCCESS= 'FETCH_PROJECT_STRUCTURE_SUCCESS';
 export const FETCH_PROJECT_STRUCTURE_FAILURE= 'FETCH_PROJECT_STRUCTURE_FAILURE';
+export const FETCH_PROJECT_LIST='FETCH_PROJECT_LIST';
+export const FETCH_PROJECT_LIST_SUCCESS='FETCH_PROJECT_LIST_SUCCESS';
+export const FETCH_PROJECT_LIST_FAILURE='FETCH_PROJECT_LIST_FAILURE';
+export const LOGOUT_REQUEST='LOGOUT_REQUEST';
+export const LOGOUT_SUCCESS='LOGOUT_SUCCESS';
+export const EDIT_TASK= 'EDIT_TASK';
+export const DELETE_TASK= 'DELETE_TASK';
 
+export function deleteTask(id,filter,sort){
+	return{
+		type:DELETE_TASK,
+		url:'http://localhost:3000/task-tracker/api/task/delete',
+		reqObj:id,
+		filter,
+		sort
+	}
 
+}
+export function initaiteEditTask(filter, sort, newTaskObj){
+	return{
+		type:EDIT_TASK,
+		url:'http://localhost:3000/task-tracker/api/task/update',
+		reqObj:newTaskObj,
+		filter,
+		sort
+	}
+}
+export function logoutSuccess(){
+	return{
+		type:LOGOUT_SUCCESS,
+		isAuthenticated: false
+	}
+}
+export function logout(){
+	return{
+		type:LOGOUT_REQUEST,
+		url:'http://localhost:3000/task-tracker/api/user/logout'
+	}
+}
+export function fetchProjectListSuccess(list){
+	return{
+		type:FETCH_PROJECT_LIST_SUCCESS,
+		projectList:list
+	}
+}
+
+export function fetchProjectList(){
+	return{
+		type:FETCH_PROJECT_LIST,
+		url:'http://localhost:3000/task-tracker/api/project/',
+		reqObj:{}
+	}
+}
 export function requestRegister(regObj){
 	return{
 		type:REQUEST_REGISTER,

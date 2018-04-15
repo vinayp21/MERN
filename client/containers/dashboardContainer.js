@@ -10,7 +10,8 @@ const mapStateToProps = state => {
     projectDetails:state.projectDetails,
     tasks:state.taskData,
     userDetails:state.user,
-    token:state.userToken
+    token:state.userToken,
+    projectList:state.projectList
   }
 }
 

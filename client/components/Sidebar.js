@@ -8,13 +8,14 @@ class Sidebar extends React.Component{
 
     return(
       <div>
-      {this.props.projectStructure?
-        <div>
+
       <div className="profile row">
-      <img className = "profile-picture" src="assets/images/download.jpeg" />
+      <img className = "profile-picture" src={'http://localhost:3000/profile/'+this.props.user.image} />
         <span className="profile-name">{this.props.user.name}</span>
         <div>Setting</div>
       </div>
+      {this.props.projectStructure?
+      <div>
       <div data-toggle="collapse" data-target="#project">
         {this.props.projectStructure.projectName}
       </div>
@@ -37,6 +38,22 @@ class Sidebar extends React.Component{
       </div>
       </div>
       : ''}
+      {this.props.projectList?
+        <div>
+        <div data-toggle="collapse" data-target="#project">
+          Projects
+        </div>
+          <div id="project" className="collapse">
+            <ul id="teams" >
+            {this.props.projectList.map((project,i) =>
+              <li onClick={() => this.getTeamMembers(team)}key ={project._id} >
+              {project.projectName}
+              </li>
+            )}
+            </ul>
+          </div>
+        </div>
+        :''}
       </div>
 
     )

@@ -11,7 +11,6 @@ let apiResponse = {
         jsonResponse.data = data;
       }
     }
-    console.log(jsonResponse);
     return jsonResponse;
   }
 }

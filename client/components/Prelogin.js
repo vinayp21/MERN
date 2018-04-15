@@ -2,6 +2,8 @@ import React from 'react';
 import { requestFailure } from '../actions'
 import { apiCall } from '../service'
 import 'bootstrap'
+import Modal from './Modal'
+import axios from 'axios';
 
   class Prelogin extends React.Component{
 
@@ -14,6 +16,7 @@ import 'bootstrap'
         loginScreen:true,
         projectList:[],
         teamList:[],
+        file:null,
         selectedProject:{
           projectName:'SELECT PROJECT'
         },
@@ -39,7 +42,7 @@ import 'bootstrap'
             return team;
         });
         this.setState({teamList:teamList});
-        console.log(teamList);
+
       })
       .catch(error => {
 
@@ -62,16 +65,27 @@ import 'bootstrap'
 
     register(e){
       e.preventDefault();
+      let data = new FormData();
+      data.append('profile', this.state.file);
       let userRegistrationObj={
         registrationDetails:{
           userName:this.refs.email.value,
           password:this.refs.password.value,
           name:this.refs.name.value,
           project:this.state.selectedProject.projectId,
-          team:this.state.selectedTeam
+          team:this.state.selectedTeam,
+          isAdmin:false
         }
       };
-      this.props.onRegister(userRegistrationObj);
+
+      axios.post('http://localhost:3000/task-tracker/api/user/profileImage', data).then(res => {
+        userRegistrationObj.registrationDetails.image=res.data.filename;
+        this.props.onRegister(userRegistrationObj);
+      })
+      .catch(error => {
+        console.log(error)
+      });
+
     }
 
     submitLogin(e){
@@ -118,13 +132,17 @@ import 'bootstrap'
     onSignIn=(userDetails) => {
       console.log(userDetails);
     }
+    fileUpload =(e) => {
+      this.setState({file:e.target.files[0]});
+    }
 
     render(){
 
       return(
         <div>
+
         <div className="pre-login-title">
-          D-Tracker
+          V-Tracker
         </div>
         <div className="pre-login-form">
         {this.state.loginScreen?
@@ -180,7 +198,6 @@ import 'bootstrap'
                       <input type="password" className="form-control" ref="password" placeholder="Password"/>
                   </td>
                 </tr>
-
                 <tr>
                   <td>
                     <div className="dropdown">
@@ -194,7 +211,6 @@ import 'bootstrap'
                 </tr>
                 <tr>
                   <td>
-
                       <div className="dropdown">
                         <button className="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">{this.state.selectedTeam}
                         <span className="caret"></span></button>
@@ -202,6 +218,12 @@ import 'bootstrap'
                         {this.state.teamList.map((team, i) => <li key = {team}><a href="void:javascript(0)" onClick={()=> this.selectTeam(team)}>{team}</a></li>)}
                         </ul>
                       </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input type='file' name="profile" onChange={this.fileUpload} className="form-control"  />
+                    <button className="btn btn-default" > Upload Image</button>
                   </td>
                 </tr>
                 <tr>

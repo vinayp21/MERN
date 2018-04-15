@@ -16,12 +16,19 @@ let UserSchema = new Schema({
     },
     project: {
         type: String,
-        required: true
+        required: false
     },
     team: {
         type: String,
-        required: true
+        required: false
     },
+    image:{
+      type: String,
+    },
+    isAdmin:{
+      type: Boolean,
+      required: true
+    }
 });
 
 module.exports = mongoose.model('User',UserSchema);

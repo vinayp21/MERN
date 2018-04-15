@@ -1,22 +1,37 @@
 import React from 'react';
 import CreateTask from '../containers/CreateTask'
-import {fetchTaskRequest} from '../actions'
+import {fetchTaskRequest, deleteTask} from '../actions'
+import Modal from './Modal'
 class Content extends React.Component{
 	constructor(){
 		super();
 		this.state={
 			assigneeList:['All'],
 			statusList:['All'],
-			editTaskDetails:{}
+			editTaskDetails:false
 		}
 	}
 	editTask = (task) => {
 		this.setState({editTaskDetails:task});
-		$('#createTaskModal').modal('toggle');
+		$('#openModal').modal('toggle');
+	}
+	deleteTask =(id) => {
+		let filterCtiteria={};
+    let sortCriteria={};
+		if(this.props.taskList.filterObj){
+      filterCtiteria=this.props.taskList.filterObj;
+    }
+    if(this.props.taskList.sortData.sortData){
+       sortCriteria=this.props.taskList.sortData;
+    }
+		let obj={
+			id
+		}
+		this.props.dispatch(deleteTask(obj,filterCtiteria,sortCriteria));
 	}
 	createTask = () => {
-		this.setState({editTaskDetails:{}});
-		$('#createTaskModal').modal('toggle');
+		this.setState({editTaskDetails:false});
+		$('#openModal').modal('toggle');
 	}
 	sortField =(field) => {
 		let filterCriteria={};
@@ -84,21 +99,9 @@ class Content extends React.Component{
 			<div>
 			{this.props.taskList?
 			<div>
-			 <div className="modal fade" id="createTaskModal" role="dialog">
-              <div className="modal-dialog">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <button type="button" className="close" data-dismiss="modal">&times;</button>
-                    <h4 className="modal-title">Create Task</h4>
-                  </div>
-                  <div className="modal-body">
-                   <CreateTask editTaskDetails={this.state.editTaskDetails}/>
-                  </div>
-                  
-                </div>
-              </div>
-            </div>
-
+						<Modal modalTitle='Create Task'>
+		        	<CreateTask userDetails={this.props.user} editTaskDetails={this.state.editTaskDetails}/>
+		        </Modal>
             <div className="create-task" >
 						<span data-toggle="modal" onClick={() => this.createTask()}>
               + Create Task
@@ -142,13 +145,13 @@ class Content extends React.Component{
                     <td>{task.status}</td>
                     <td>{task.assignee}</td>
 										<td onClick={() => this.editTask(task)}>Edit</td>
+										<td onClick={() => this.deleteTask(task._id)}>X</td>
                   </tr>
 								)}
                 </tbody>
               </table>
 							</div>
 							: '' }
-
              </div>
 			)
 	}

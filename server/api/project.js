@@ -24,7 +24,6 @@ routes.post('/create',(req , res) => {
 });
 
 routes.post('/delete',(req, res) => {
-	console.log(req.body.projectId);
 	Project.remove({'_id':req.body.projectId}, (err, data) => {
 		if(err){
 			res.json(ApiResponseGenerator.generate(true, 'error in deleting the project'));

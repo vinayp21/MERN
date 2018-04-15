@@ -1,15 +1,22 @@
 import React from 'react';
 import Content from './Content';
 import Sidebar from './Sidebar';
-import {fetchTaskRequest, fetchProjectStructure} from '../actions'
+import {fetchTaskRequest, fetchProjectStructure, logout} from '../actions'
 class Dashboard extends React.Component{
 	constructor(props){
 		super(props);
-		if(!this.props.isAuthenticated){
+		if(document.cookie.indexOf('session-id')<0){
 			this.props.history.push('/')
 		}
 	}
-
+	logout= () =>{
+		this.props.dispatch(logout());
+	}
+	componentWillReceiveProps(nextProps){
+		if(document.cookie.indexOf('session-id')<0){
+			this.props.history.push('/')
+		}
+	}
 	render(){
 		return(
 
@@ -27,7 +34,7 @@ class Dashboard extends React.Component{
             </div>
             <div className="collapse navbar-collapse custom-header" id="js-navbar-collapse">
               <ul className="nav navbar-nav navbar-right">
-                <li ><a href="void:javascript(0)" >Logout</a></li>
+                <li ><a href="void:javascript(0)"  onClick={this.logout}>Logout</a></li>
               </ul>
             </div>
           </div>
@@ -35,11 +42,17 @@ class Dashboard extends React.Component{
         <div className="container-fluid">
           <div className="row">
             <div className="col-lg-3 col-md-3 sidebar">
-            <Sidebar projectStructure={this.props.projectDetails} user ={this.props.userDetails}/>
+            <Sidebar projectStructure={this.props.projectDetails} projectList={this.props.projectList} user ={this.props.userDetails}/>
             </div>
             <div className="col-lg-9 col-md-9 content">
-              <Content token={this.props.token} taskList = {this.props.tasks} dispatch={this.props.dispatch}/>
-            </div>
+						{this.props.projectList?
+							<div>
+							Admin Screen
+							</div>
+							:
+							<Content user ={this.props.userDetails} token={this.props.token} taskList = {this.props.tasks} dispatch={this.props.dispatch} projectList={this.props.projectList}/>
+						}
+              </div>
           </div>
         </div>
 	    </div>

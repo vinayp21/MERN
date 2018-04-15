@@ -64,8 +64,7 @@ let verifyUser = (req, callback) => {
 
 let userAuthenticator = {
   authenticate: (req, res, next) => {
-    console.log(req.path);
-    if (req.path === '/user/register' || req.path === '/user/authenticate' || req.path === '/project/'|| req.method=== 'OPTIONS') {
+    if (req.path === '/user/register' || req.path === '/user/profileImage' || req.path === '/user/authenticate' || req.path === '/project/'|| req.method=== 'OPTIONS') {
       next();
       return;
     }
@@ -79,7 +78,13 @@ let userAuthenticator = {
         res.json(apiResponseGenerator.generate(true, 'Invalid token'));
         return;
       }
-      next();
+      if(req.session.userInfo){
+        next();
+      }else {
+        res.json(apiResponseGenerator.generate(true, 'Session Logout'));
+      }
+      //console.log();
+
     });
   },
 

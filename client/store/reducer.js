@@ -1,7 +1,9 @@
 
 export default (state ={}, action) => {
-
 	switch(action.type){
+		case 'FETCH_PROJECT_LIST_SUCCESS':
+			return Object.assign({}, state, {projectList: action.projectList})
+
 		case 'REQUEST_SUCCESS':
 			return Object.assign({}, state, {
 				isRegistered:true,
@@ -44,5 +46,11 @@ export default (state ={}, action) => {
 			user:action.loginData.user,
 			userToken:action.loginData.token
 		})
+		case 'LOGOUT_SUCCESS':
+		return Object.assign({}, state, {
+			isAuthenticated:action.isAuthenticated
+		})
+		default:
+			return state;
 	}
 }

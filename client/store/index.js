@@ -2,13 +2,55 @@ import React from 'react';
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import reducer from './reducer';
-import { requestSuccess, requestFailure, fetchTaskSuccess, fetchTaskFailure, loginSuccess,  fetchProjectStructure, fetchTaskRequest, loginFailure, fetchProjectStructureFailure, fetchProjectStructureSuccess} from '../actions'
+import { requestSuccess, requestFailure, logoutSuccess, fetchProjectListSuccess, fetchTaskSuccess, fetchProjectList, fetchTaskFailure, loginSuccess,  fetchProjectStructure, fetchTaskRequest, loginFailure, fetchProjectStructureFailure, fetchProjectStructureSuccess} from '../actions'
 import {apiCall} from '../service'
 const middleWareFunction = store => next => action => {
 	if(store.getState()){
 		action['token']=store.getState().userToken;
 	}
 	switch (action.type) {
+		case 'DELETE_TASK':
+		apiCall(action).then(data => {
+			if(data.err){
+				throw new Error(data.msg);
+			}else{
+				store.dispatch(fetchTaskRequest(action.filter, action.sort));
+			}
+		})
+		.catch(error => {
+				store.dispatch(createTaskFailure(error.toString()));
+		});
+		break
+		case 'EDIT_TASK':
+		apiCall(action).then(data => {
+			if(data.err){
+				throw new Error(data.msg);
+			}else{
+				store.dispatch(fetchTaskRequest(action.filter, action.sort));
+			}
+		})
+		.catch(error => {
+				store.dispatch(createTaskFailure(error.toString()));
+		});
+		break;
+		case 'LOGOUT_REQUEST':
+		apiCall(action).then((data) => {
+			if(data.err){
+				throw new Error(data.msg);
+			}else{
+				store.dispatch(logoutSuccess());
+			}
+		});
+			break;
+		case 'FETCH_PROJECT_LIST':
+			apiCall(action).then((data) => {
+				if(data.err){
+					throw new Error(data.msg);
+				}else{
+					store.dispatch(fetchProjectListSuccess(data.data));
+				}
+			});
+			break;
 		case 'FETCH_TASK_REQUEST':
 		apiCall(action).then((data) => {
 		  	if(data.err){
@@ -41,7 +83,13 @@ const middleWareFunction = store => next => action => {
 							"filterKey":"_id",
 							"filterData":data.data.user.project
 						};
-						store.dispatch(fetchProjectStructure(project,data.data.token));
+
+						if(data.data.user.isAdmin){
+								store.dispatch(fetchProjectList(project,data.data.token));
+						}else{
+								store.dispatch(fetchProjectStructure(project,data.data.token));
+						}
+
 		    	}
 		  	})
 		  	.catch(error => {
@@ -81,7 +129,7 @@ const middleWareFunction = store => next => action => {
 					    	}
 					  })
 				  	.catch(error => {
-				        dispatch(requestFailure('failed to register'))
+				        store.dispatch(requestFailure('failed to register'))
 				    });
 						break;
 		default:

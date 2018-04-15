@@ -60,6 +60,15 @@ body{
 	.submit{
 		width: 100%;
 	}
+	td{
+		position: relative;
+	}
+	input[type="file"]{
+		position: absolute;
+		width: 100%;
+		opacity: 0;
+		cursor: pointer;
+	}
 }
 .header{
 	.navbar{
@@ -78,6 +87,14 @@ body{
 			color: #ffffff;
 			font-size:18px;
 		}
+		.navbar-nav>li>a:hover{
+			color: #ffffff;
+			font-size:18px;
+		}
+		.navbar-nav>li>a :visited {
+			color: #ffffff;
+			font-size:18px;
+		}
 	}
 }
 
@@ -90,7 +107,7 @@ body{
 		background-color: rgba(255, 255, 255, 0.2);
 	}
 	.profile-picture{
-		width: 50px;
+		width: 100px;
 		border-radius: 25px;
 	}
 	.profile-name{
