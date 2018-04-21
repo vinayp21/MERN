@@ -6,16 +6,6 @@ import List from './List'
 class Content extends React.Component{
 	constructor(props){
 		super(props);
-		this.state={
-		assigneeList:['All'],
-		statusList:['All'],
-		editTaskDetails:false,
-		listData:[]
-	}
-	}
-
-	componentWillMount(){
-		if(this.props.taskList){
 		let listObj={
 			header:[
 				{
@@ -45,7 +35,7 @@ class Content extends React.Component{
 				}
 			]
 		};
-		let listData=this.props.taskList.task.map((task, i) => {
+		let listData=props.taskList.task.map((task, i) => {
 			let rowData=listObj.header.map((header,j) =>{
 				return{
 					columnId:header.columnId,
@@ -58,9 +48,14 @@ class Content extends React.Component{
 			}
 		});
 		listObj.listData=listData;
-		this.setState({listData:listObj});
+		this.state={
+			assigneeList:['All'],
+			statusList:['All'],
+			editTaskDetails:false,
+			listData:listObj
+		}
 	}
-	}
+
 	editTask = (task) => {
 		this.setState({editTaskDetails:task});
 		$('#openModal').modal('toggle');

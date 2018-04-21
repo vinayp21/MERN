@@ -19,7 +19,8 @@ class Dashboard extends React.Component{
 	}
 	render(){
 		return(
-
+			<div>
+			{this.props.tasks?
 			<div className="dashboard">
 				<div className="header">
           <div className="navbar navbar-default" role="navigation">
@@ -56,6 +57,8 @@ class Dashboard extends React.Component{
           </div>
         </div>
 	    </div>
+			:''}
+			</div>
 			);
 	}
 }

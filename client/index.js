@@ -29,7 +29,6 @@ try{
 	}
 }
 const store = storeCollection(persitantData);
-
 store.subscribe(() => {
 	localStorage.setItem('savedState', JSON.stringify(store.getState()));
 });
