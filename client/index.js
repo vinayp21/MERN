@@ -11,12 +11,13 @@ import { requestFailure, requestSuccess  } from './actions';
 import './assets/scss/dashboard.scss';
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 let persitantData={
 	isRegistered:false,
 	isAuthenticated:false,
 	errorMessage: 'error',
 	user:null
-}
+};
 try{
 	persitantData=JSON.parse(localStorage.getItem('savedState'))
 }catch(err){
@@ -32,7 +33,6 @@ const store = storeCollection(persitantData);
 store.subscribe(() => {
 	localStorage.setItem('savedState', JSON.stringify(store.getState()));
 });
-
 ReactDOM.render(
 		<Provider store ={store}>
 			{routes}

@@ -2,19 +2,75 @@ import React from 'react';
 import CreateTask from '../containers/CreateTask'
 import {fetchTaskRequest, deleteTask} from '../actions'
 import Modal from './Modal'
+import List from './List'
 class Content extends React.Component{
-	constructor(){
-		super();
+	constructor(props){
+		super(props);
 		this.state={
-			assigneeList:['All'],
-			statusList:['All'],
-			editTaskDetails:false
-		}
+		assigneeList:['All'],
+		statusList:['All'],
+		editTaskDetails:false,
+		listData:[]
+	}
+	}
+
+	componentWillMount(){
+		if(this.props.taskList){
+		let listObj={
+			header:[
+				{
+					columnId:'taskName',
+					columnName:'Task Name',
+					isSoratable:true
+				},
+				{
+					columnId:'taskDescription',
+					columnName:'Description',
+					isSoratable:true
+				},
+				{
+					columnId:'dueDate',
+					columnName:'Due Date',
+					isSoratable:true
+				},
+				{
+					columnId:'assignee',
+					columnName:'Assignee',
+					isSoratable:true
+				},
+				{
+					columnId:'status',
+					columnName:'Status',
+					isSoratable:true
+				}
+			]
+		};
+		let listData=this.props.taskList.task.map((task, i) => {
+			let rowData=listObj.header.map((header,j) =>{
+				return{
+					columnId:header.columnId,
+					columnContent:task[header.columnId]
+				}
+			});
+			return{
+				payload:task,
+				rowData:rowData
+			}
+		});
+		listObj.listData=listData;
+		this.setState({listData:listObj});
+	}
 	}
 	editTask = (task) => {
 		this.setState({editTaskDetails:task});
 		$('#openModal').modal('toggle');
 	}
+	listOptions={
+		isDelete:true,
+		isEdit:true,
+		isMultiselect:true
+	};
+
 	deleteTask =(id) => {
 		let filterCtiteria={};
     let sortCriteria={};
@@ -60,9 +116,56 @@ class Content extends React.Component{
 				const uniqueStatus = ['All', ...new Set(nextProps.taskList.task.map(item => item.status))];
 				this.setState({assigneeList:uniqueUsers, statusList:uniqueStatus});
 			}
+			let listObj={
+				header:[
+					{
+						columnId:'taskName',
+						columnName:'Task Name',
+						isSoratable:true
+					},
+					{
+						columnId:'taskDescription',
+						columnName:'Description',
+						isSoratable:true
+					},
+					{
+						columnId:'dueDate',
+						columnName:'Due Date',
+						isSoratable:true
+					},
+					{
+						columnId:'assignee',
+						columnName:'Assignee',
+						isSoratable:true
+					},
+					{
+						columnId:'status',
+						columnName:'Status',
+						isSoratable:true
+					}
+				]
+			};
+			let listData=nextProps.taskList.task.map((task, i) => {
+				let rowData=listObj.header.map((header,j) =>{
+					return{
+						columnId:header.columnId,
+						columnContent:task[header.columnId]
+					}
+				});
+				return{
+					payload:task,
+					rowData:rowData
+				}
+			});
+
+			listObj.listData=listData;
+			this.setState({listData:listObj})
+
 		}
 
 	}
+
+
 	selectFilter=(key, user) => {
 		let sortCriteria={};
 		let filterCriteria={};
@@ -95,6 +198,7 @@ class Content extends React.Component{
 		this.props.dispatch(fetchTaskRequest(filterCriteria, sortCriteria));
 	}
 	render(){
+
 		return(
 			<div>
 			{this.props.taskList?
@@ -125,32 +229,8 @@ class Content extends React.Component{
 							<button className="btn btn-default" onClick={this.clearAllFilter}>Clear All</button>
 							</span>
             </div>
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th onClick={() => this.sortField('taskName')}>Task Name</th>
-                    <th onClick={() => this.sortField('taskDescription')}>Description</th>
-                    <th onClick={() => this.sortField('dueDate')}>Due date</th>
-                    <th>Status</th>
-                    <th onClick={() => this.sortField('assignee')}>Assignee</th>
-										<th></th>
-                  </tr>
-                </thead>
-                <tbody>
-								{this.props.taskList.task.map((task, i) =>
-									<tr key={i}>
-                    <td>{task.taskName}</td>
-                    <td>{task.taskDescription}</td>
-                    <td>{task.dueDate}</td>
-                    <td>{task.status}</td>
-                    <td>{task.assignee}</td>
-										<td onClick={() => this.editTask(task)}>Edit</td>
-										<td onClick={() => this.deleteTask(task._id)}>X</td>
-                  </tr>
-								)}
-                </tbody>
-              </table>
-							</div>
+						    <List data={this.state.listData} options={this.listOptions}/>
+							 </div>
 							: '' }
              </div>
 			)
