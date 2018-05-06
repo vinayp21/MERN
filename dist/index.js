@@ -43,7 +43,7 @@ app.use(session({
   cookie: { secure: false }
 }));
 
-//_dbConnector2.default.connect();
+_dbConnector2.default.connect();
 app.set('superSecret', _config2.default.secret);
 app.use(compression());
 app.use(_bodyParser2.default.json());

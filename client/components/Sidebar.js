@@ -10,7 +10,7 @@ class Sidebar extends React.Component{
       <div>
 
       <div className="profile row">
-      <img className = "profile-picture" src={'/profile/'+this.props.user.image} />
+      <img className = "profile-picture" src={'http://localhost:3000/profile/'+this.props.user.image} />
         <span className="profile-name">{this.props.user.name}</span>
         <div>Setting</div>
       </div>
