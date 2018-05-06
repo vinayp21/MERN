@@ -12,11 +12,26 @@ var config = {
    devServer: {
       inline: true,
       historyApiFallback: true,
-      port: 8080
+      port: 8080,
+      proxy:{
+        "/task-tracker": {
+          target: "http://localhost:3000"
+        }
+
+      }
    },
 
    module: {
       loaders: [
+          // {
+      		// 	enforce: 'pre',
+      		// 	test: /\.(js|jsx)$/,
+      		// 	exclude: /(node_modules|lib)/,
+      		// 	loader: 'eslint-loader',
+      		// 	options: {
+      		// 		cache: false
+      		// 	}
+      		// },
          {
             test: /\.jsx?$/,
             exclude: /node_modules/,

@@ -34,7 +34,7 @@ import axios from 'axios';
       	"filterData": projectData.projectId
       };
       let action={
-        url:'http://localhost:3000/task-tracker/api/project/',
+        url:'/task-tracker/api/project/',
         reqObj:projectObj
       };
       apiCall(action).then((data) => {
@@ -78,7 +78,7 @@ import axios from 'axios';
         }
       };
 
-      axios.post('http://localhost:3000/task-tracker/api/user/profileImage', data).then(res => {
+      axios.post('/task-tracker/api/user/profileImage', data).then(res => {
         userRegistrationObj.registrationDetails.image=res.data.filename;
         this.props.onRegister(userRegistrationObj);
       })
@@ -113,7 +113,7 @@ import axios from 'axios';
 
 
       let action={
-        url:'http://localhost:3000/task-tracker/api/project/',
+        url:'/task-tracker/api/project/',
         reqObj:{}
       };
       apiCall(action).then((data) => {

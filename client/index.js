@@ -28,7 +28,9 @@ try{
 		user:null
 	}
 }
+
 const store = storeCollection(persitantData);
+//store.dispatch(requestFailure('falied'));
 store.subscribe(() => {
 	localStorage.setItem('savedState', JSON.stringify(store.getState()));
 });

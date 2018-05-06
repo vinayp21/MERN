@@ -91,7 +91,7 @@ class CreateTask extends React.Component{
       value:val
     }
     let action={
-      url:'http://localhost:3000/task-tracker/api/user/getAssignee',
+      url:'/task-tracker/api/user/getAssignee',
       reqObj,
       token:this.props.token
     }

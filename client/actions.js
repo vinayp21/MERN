@@ -27,7 +27,7 @@ export const DELETE_TASK= 'DELETE_TASK';
 export function deleteTask(id,filter,sort){
 	return{
 		type:DELETE_TASK,
-		url:'http://localhost:3000/task-tracker/api/task/delete',
+		url:'/task-tracker/api/task/delete',
 		reqObj:id,
 		filter,
 		sort
@@ -37,7 +37,7 @@ export function deleteTask(id,filter,sort){
 export function initaiteEditTask(filter, sort, newTaskObj){
 	return{
 		type:EDIT_TASK,
-		url:'http://localhost:3000/task-tracker/api/task/update',
+		url:'/task-tracker/api/task/update',
 		reqObj:newTaskObj,
 		filter,
 		sort
@@ -52,7 +52,7 @@ export function logoutSuccess(){
 export function logout(){
 	return{
 		type:LOGOUT_REQUEST,
-		url:'http://localhost:3000/task-tracker/api/user/logout'
+		url:'/task-tracker/api/user/logout'
 	}
 }
 export function fetchProjectListSuccess(list){
@@ -65,14 +65,14 @@ export function fetchProjectListSuccess(list){
 export function fetchProjectList(){
 	return{
 		type:FETCH_PROJECT_LIST,
-		url:'http://localhost:3000/task-tracker/api/project/',
+		url:'/task-tracker/api/project/',
 		reqObj:{}
 	}
 }
 export function requestRegister(regObj){
 	return{
 		type:REQUEST_REGISTER,
-		url:'http://localhost:3000/task-tracker/api/user/register',
+		url:'/task-tracker/api/user/register',
 		reqObj:regObj
 	}
 }
@@ -99,7 +99,7 @@ export function fetchTaskRequest(filter ={}, sort= {}){
 	};
 	return{
 		type:FETCH_TASK_REQUEST,
-		url:'http://localhost:3000/task-tracker/api/task',
+		url:'/task-tracker/api/task',
 		reqObj:requestObj
 	}
 }
@@ -125,7 +125,7 @@ export function fetchTaskFailure(errMsg){
 export function initaiteCreateTask(filter, sort, newTaskObj){
 	return{
 		type:CREATE_TASK,
-		url:'http://localhost:3000/task-tracker/api/task/create',
+		url:'/task-tracker/api/task/create',
 		reqObj:newTaskObj,
 		filter,
 		sort
@@ -142,7 +142,7 @@ export function fetchProjectStructure(project){
 
 	return{
 		type:FETCH_PROJECT_STRUCTURE,
-		url:'http://localhost:3000/task-tracker/api/project/',
+		url:'/task-tracker/api/project/',
 		reqObj:project
 	}
 }
@@ -163,7 +163,7 @@ export function fetchProjectStructureFailure(error){
 export function requestLogin (loginObj){
 	return{
 		type:LOGIN_ATTEMPT,
-		url:'http://localhost:3000/task-tracker/api/user/authenticate',
+		url:'/task-tracker/api/user/authenticate',
 		reqObj:loginObj
 
 	}
