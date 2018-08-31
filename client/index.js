@@ -30,7 +30,7 @@ try{
 }
 
 const store = storeCollection(persitantData);
-//store.dispatch(requestFailure('falied'));
+store.dispatch(requestFailure('falied'));
 store.subscribe(() => {
 	localStorage.setItem('savedState', JSON.stringify(store.getState()));
 });

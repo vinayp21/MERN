@@ -12,10 +12,6 @@ var _routes = require('./api/routes');
 
 var _routes2 = _interopRequireDefault(_routes);
 
-var _dbConnector = require('./db/dbConnector');
-
-var _dbConnector2 = _interopRequireDefault(_dbConnector);
-
 var _jsonwebtoken = require('jsonwebtoken');
 
 var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
@@ -31,6 +27,8 @@ var _config2 = _interopRequireDefault(_config);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var compression = require('compression');
+// import dbConnector from './db/dbConnector';
+
 var app = (0, _express2.default)();
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
@@ -43,7 +41,8 @@ app.use(session({
   cookie: { secure: false }
 }));
 
-_dbConnector2.default.connect();
+// dbConnector.connect();
+app.use(_express2.default.static('public'));
 app.set('superSecret', _config2.default.secret);
 app.use(compression());
 app.use(_bodyParser2.default.json());
@@ -64,7 +63,7 @@ app.use(function (req, res, next) {
   // Pass to next layer of middleware
   next();
 });
-app.use(_express2.default.static(__dirname + '/assets'));
+// app.use(express.static(__dirname +'/assets'));
 
 app.use('/task-tracker/api', _routes2.default);
 var PORT = process.env.PORT || 3000;

@@ -14,6 +14,7 @@ const routes = (
 		  <Route exact path='/' component={PreloginContainer}/>
 		  <Route path='/dashboard' component={DashbaordContainer}/>
 			<Route path='/admin' component={AdminContainer}/>
+			<Route  component={PreloginContainer}/>
 		</Switch>
 	</Router>
 	);
