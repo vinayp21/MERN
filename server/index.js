@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import routes from './api/routes';
-// import dbConnector from './db/dbConnector';
+import dbConnector from './db/dbConnector';
 import jwt from 'jsonwebtoken';
 import user from './db/schemas/user';
 import config from './config';
@@ -12,14 +12,12 @@ let cookieParser = require('cookie-parser');
 app.use(cookieParser());
 app.use(session({
   secret: "secret Key!",
-  resave: false,
   httpOnly: false,
-  saveUninitialized: true,
   cookie: { secure: false }
   }));
 
-// dbConnector.connect();
-app.use(express.static('public'));
+dbConnector.connect();
+// app.use(express.static('public'));
 app.set('superSecret', config.secret);
 app.use(compression());
 app.use(bodyParser.json());
@@ -41,6 +39,7 @@ app.use(function(req, res, next){
     next();
 });
 // app.use(express.static(__dirname +'/assets'));
+
 
 app.use('/task-tracker/api', routes);
 const PORT = process.env.PORT || 3000;
