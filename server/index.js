@@ -16,7 +16,7 @@ app.use(session({
   cookie: { secure: false }
   }));
 
-dbConnector.connect();
+// dbConnector.connect();
 // app.use(express.static('public'));
 app.set('superSecret', config.secret);
 app.use(compression());

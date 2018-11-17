@@ -97,7 +97,8 @@ var userAuthenticator = {
         res.json(_apiResponseGenerator2.default.generate(true, 'Invalid token'));
         return;
       }
-      if (req.session.userInfo) {
+      console.log(req.cookies['session-id'], req.sessionID);
+      if (req.session.userInfo && req.sessionID === req.cookies['session-id']) {
         next();
       } else {
         res.json(_apiResponseGenerator2.default.generate(true, 'Session Logout'));
