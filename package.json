@@ -6,7 +6,9 @@
     "start": "NODE_ENV=development PORT=3000 nodemon ./dist/index.js",
     "build": "NODE_ENV=production babel ./server -d ./dist"
   },
-  "engines" : { "node" : "9.8.0" },
+  "engines": {
+    "node": "9.8.0"
+  },
   "license": "MIT",
   "dependencies": {
     "babel-polyfill": "^6.23.0",

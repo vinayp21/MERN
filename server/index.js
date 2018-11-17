@@ -17,7 +17,7 @@ app.use(session({
   }));
 
 // dbConnector.connect();
-// app.use(express.static('public'));
+app.use(express.static('public'));
 app.set('superSecret', config.secret);
 app.use(compression());
 app.use(bodyParser.json());

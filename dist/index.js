@@ -42,7 +42,7 @@ app.use(session({
 }));
 
 // dbConnector.connect();
-// app.use(express.static('public'));
+app.use(_express2.default.static('public'));
 app.set('superSecret', _config2.default.secret);
 app.use(compression());
 app.use(_bodyParser2.default.json());
